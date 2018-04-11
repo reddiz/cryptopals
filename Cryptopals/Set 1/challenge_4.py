@@ -1,8 +1,18 @@
+import c3module as c3
+
 tes = open("chal4inp.txt", "r")
-wew = []
-for i in tes:
-    if i[-1] =='\n':
-        wew.append(i[:-1])
-wow = "".join(wew)
-inp = wow.decode("hex")
-print wow
+content = tes.read()
+tmp = []
+dic = {}
+cnt = 0
+for i in content:
+    if i != '\n':
+        tmp.append(i)
+    else:
+        dic[cnt] = "".join(tmp)
+        cnt += 1
+        tmp = []
+for k, v in dic.items():
+    wll = v.decode("hex")
+    print k, c3.maxScore(wll)
+tes.close()
