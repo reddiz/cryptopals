@@ -1,7 +1,7 @@
 def s2b(inp):
     bn = []
     for i in inp:
-        b = bin(ord(i)).replace("0b", '')
+        b = bin(i).replace("0b", '')
         if len(b) < 8:
             b = "0"*(8 - len(b)) + b
         bn.append(b)
@@ -16,7 +16,15 @@ def Hamming(in1, in2):
             cnt += 1
     return cnt
 
-tes1 = "this is a test"
-tes2 = "wokka wokka!!!"
-assert Hamming(s2b(tes1), s2b(tes2)) == 37, "False!"
+def edt(df, inp1, inp2):
+    h1, h2 = [], []
+    for i in df:
+        tmp1 = ord(i) ^ inp1
+        tmp2 = ord(i) ^ inp2
+        h1.append(tmp1)
+        h2.append(tmp2)
+    res =  Hamming(s2b(h1), s2b(h2))
+    return res/len(KEYSIZE)
+
+data = open("chal6inp.txt", "r").read()
 KEYSIZE = range(2, 41)
