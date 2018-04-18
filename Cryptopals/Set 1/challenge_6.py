@@ -1,7 +1,7 @@
 def s2b(inp):
     bn = []
     for i in inp:
-        b = bin(i).replace("0b", '')
+        b = bin(ord(i)).replace("0b", '')
         if len(b) < 8:
             b = "0"*(8 - len(b)) + b
         bn.append(b)
@@ -10,21 +10,45 @@ def s2b(inp):
 
 def Hamming(in1, in2):
     cnt = 0
+    res = []
     for i,j in zip(in1, in2):
         tmp = int(i) ^ int(j)
         if tmp == 1:
             cnt += 1
-    return cnt
+            res.append(cnt)
+    ttl = sum(res)
+    #print ttl
+    return ttl
 
-def edt(df, inp1, inp2):
-    h1, h2 = [], []
-    for i in df:
-        tmp1 = ord(i) ^ inp1
-        tmp2 = ord(i) ^ inp2
-        h1.append(tmp1)
-        h2.append(tmp2)
-    res =  Hamming(s2b(h1), s2b(h2))
-    return res/len(KEYSIZE)
+def edt(df, ky):
+    tes = {}
+    for i in ky:
+        res = []
+        for j in range(0, len(df), i):
+            if j+i < len(data):
+                b1 = s2b(df[j:(j+i)])
+                b2 = s2b(df[j+i:(j+i)+i])
+                tmp = Hamming(b1, b2)
+            res.append(tmp)
+        tes[i] = sum(res)
+    for k,j in tes.items():
+        print k, j/i
+    #return tes
 
-data = open("chal6inp.txt", "r").read()
+file = open("chal6inp.txt", "r")
+data = file.read()
+strl = []
 KEYSIZE = range(2, 41)
+
+for x in data:
+    if x != '\n':
+        strl.append(x)
+
+strc = "".join(strl)
+print edt(strc, KEYSIZE)
+#for i in KEYSIZE:
+#    for j in range(0, len(strc), i):
+#            if j+i < len(strc):
+#                print i, strc[j:j+i], strc[j+i:(j+i)+i]
+
+file.close()
