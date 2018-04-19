@@ -20,20 +20,28 @@ def Hamming(in1, in2):
     #print ttl
     return ttl
 
-def edt(df, ky):
+def edt(d, k):
     tes = {}
-    for i in ky:
+    for i in k:
         res = []
-        for j in range(0, len(df), i):
+        for j in range(0, len(d), i):
             if j+i < len(data):
-                b1 = s2b(df[j:(j+i)])
-                b2 = s2b(df[j+i:(j+i)+i])
+                b1 = s2b(d[j:(j+i)])
+                b2 = s2b(d[j+i:(j+i)+i])
                 tmp = Hamming(b1, b2)
             res.append(tmp)
-        tes[i] = sum(res)
-    for k,j in tes.items():
-        print k, j/i
-    #return tes
+        tes[i] = sum(res)/(i*j)
+    return min(tes, key=tes.get)
+
+def break_cipher(df, ky):
+    bc = {}
+    cnt = 0
+    for i in range(0, len(df), ky):
+        k = df[i:(i+ky)]
+        if cnt < ky:
+            bc[cnt] = k[cnt]
+            print bc
+        cnt += 1
 
 file = open("chal6inp.txt", "r")
 data = file.read()
@@ -45,7 +53,7 @@ for x in data:
         strl.append(x)
 
 strc = "".join(strl)
-print edt(strc, KEYSIZE)
+print break_cipher(strc, edt(strc.decode("base64"), KEYSIZE))
 #for i in KEYSIZE:
 #    for j in range(0, len(strc), i):
 #            if j+i < len(strc):
